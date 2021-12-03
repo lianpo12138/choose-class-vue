@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": false,
   "description": "轻量级后台管理系统基础模板",
-  "author": "woai3c <411020382@qq.com>",
+  "author": "wulinfeng <420564393@qq.com>",
   "scripts": {
     "build": "node build/build.js",
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -13,7 +13,8 @@
     "axios": "^0.21.4",
     "iview": "^3.1.5",
     "vue": "^2.5.2",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
@@ -66,4 +67,3 @@
     "npm": ">= 3.0.0"
   }
 }
-
