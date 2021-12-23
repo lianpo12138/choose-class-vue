@@ -6,7 +6,7 @@
   "author": "wulinfeng <420564393@qq.com>",
   "scripts": {
     "build": "node build/build.js",
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
     "start": "npm run dev"
   },
   "dependencies": {
