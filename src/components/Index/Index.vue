@@ -34,10 +34,8 @@
           </template>
           <MenuItem name="" v-if="myRole=='teacher'">我的任课</MenuItem>
           <MenuItem name="" v-if="myRole=='teacher'">任课表</MenuItem>
-          <MenuItem name="" v-if="myRole=='admin'">选课时间设置</MenuItem>
           <MenuItem name="" v-if="myRole=='admin'">课程审核</MenuItem>
         </Submenu>
-
         <Submenu name="3" v-if="myRole=='admin'">
           <template slot="title">
             <Icon type="ios-paper"/>
@@ -153,6 +151,9 @@
             <Spin size="large"></Spin>
           </div>
         </div>
+        <div class="layout-copy">
+          2022 &copy;create by 吴林峰
+        </div>
       </div>
     </section>
   </div>
@@ -165,6 +166,7 @@
         name: 'Index',
         data() {
             return {
+
                 myRole: this.$store.state.user,
                 openMenus: [], // 要打开的菜单名字 name属性
                 menuCache: [], // 缓存已经打开的菜单
@@ -441,7 +443,12 @@
     justify-content: space-between;
     color: #666;
   }
-
+  .layout-copy{
+    font-size: medium;
+    text-align: center;
+    padding: 10px 0 20px;
+    color: #9ea7b4;
+  }
 
   /* 侧边栏 */
   aside {

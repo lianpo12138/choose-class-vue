@@ -21,6 +21,7 @@
       <Button :loading="isShowLoading" class="submit" type="primary" @click="signin">登陆</Button>
       <p class="account"> <span @click="forgetPwd">忘记密码</span></p>
     </div>
+
   </div>
 </template>
 
@@ -168,6 +169,7 @@
     color: #fff;
 
   }
+
 
 </style>
 

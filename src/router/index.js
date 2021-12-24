@@ -3,17 +3,17 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
-const Login = () => import('@/components/Login/Login')
-const Index = () => import('@/components/Index/Index')
+const Login = () => import('../components/Login/Login');
+const Index = () => import('../components/Index/Index');
 
-const Home = () => import('@/components/Home/Home')
-const T1 = () => import('@/components/T1/T1')
-const Class1 = () => import('@/components/T1/Class1')
-const Class = () => import('@/components/T1/Class')
-const Password = () => import('@/components/Password/Password')
-const Msg = () => import('@/components/Msg/Msg')
-const AddClass = () => import('@/components/Msg/AddClass')
-const UserInfo = () => import('@/components/UserInfo/UserInfo')
+const Home = () => import('../components/Home/Home');
+const T1 = () => import('../components/T1/T1');
+const Class1 = () => import('../components/T1/Class1');
+const Class = () => import('../components/T1/Class');
+const Password = () => import('../components/Password/Password');
+const Msg = () => import('../components/Msg/Msg');
+const AddClass = () => import('../components/Msg/AddClass');
+const UserInfo = () => import('../components/UserInfo/UserInfo');
 
 
 // 首页下的子组件
@@ -70,7 +70,11 @@ export default new Router({
     {
       path: '/index',
       component: Index,
+      meta: {
+        requireAuth: true, // 判断是否需要登录
+      },
       children,
     }
   ]
+
 })

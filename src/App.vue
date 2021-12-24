@@ -1,6 +1,7 @@
 <template>
     <div id="app">
         <router-view/>
+      <div class="footer"> 2022 &copy; create by 吴林峰</div>
     </div>
 </template>
 
@@ -31,5 +32,16 @@ li {
 }
 #app {
     height: 100%;
+}
+:root{
+  --footer-height: 10px;
+}
+.footer{
+  font-size: medium;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+  bottom: 0;
+  color: #fff;
 }
 </style>
