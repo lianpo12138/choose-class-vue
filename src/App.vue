@@ -42,6 +42,6 @@ li {
   text-align: center;
   width: 100%;
   bottom: 0;
-  color: #fff;
+  color: #c5c8ce;
 }
 </style>

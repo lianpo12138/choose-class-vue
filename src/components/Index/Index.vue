@@ -151,9 +151,6 @@
             <Spin size="large"></Spin>
           </div>
         </div>
-        <div class="layout-copy">
-          2022 &copy;create by 吴林峰
-        </div>
       </div>
     </section>
   </div>
@@ -443,12 +440,7 @@
     justify-content: space-between;
     color: #666;
   }
-  .layout-copy{
-    font-size: medium;
-    text-align: center;
-    padding: 10px 0 20px;
-    color: #9ea7b4;
-  }
+
 
   /* 侧边栏 */
   aside {
