@@ -14,6 +14,7 @@ export default new Vuex.Store({
     set (state, payload) {
       state.user = payload.role;
       state.username = payload.realname;
+      state.token = payload.token;
     }
   },
   plugins: [persistedState({storage: window.sessionStorage})]
