@@ -11,13 +11,13 @@
         <MenuItem name="Home">
           <Icon size="18" type="md-home"/>
           <span v-show="isShowAsideTitle">主页</span>
-<!--      这里面有修改公告的按钮    -->
+          <!--      这里面有修改公告的按钮    -->
 
         </MenuItem>
         <Submenu name="1">
           <template slot="title">
             <Icon type="ios-paper"/>
-            <span v-show="isShowAsideTitle"  @onclick="security">选课管理</span>
+            <span v-show="isShowAsideTitle" @onclick="security">选课管理</span>
           </template>
           <!-- name:路由名称 -->
           <MenuItem v-show="isShowAsideTitle" name="T1">课程列表
@@ -47,7 +47,7 @@
         </Submenu>
 
 
-        <Submenu name="4"  v-if="myRole!='student'">
+        <Submenu name="4" v-if="myRole!='student'">
           <template slot="title">
             <Icon type="ios-paper"/>
             <span v-show="isShowAsideTitle">学生管理</span>
@@ -159,278 +159,279 @@
 
 <script>
 
-    export default {
-        name: 'Index',
-        data() {
-            return {
+  export default {
+    name: 'Index',
+    data() {
+      return {
 
-                myRole: this.$store.state.user,
-                openMenus: [], // 要打开的菜单名字 name属性
-                menuCache: [], // 缓存已经打开的菜单
-                showLoading: false, // 是否显示loading
-                hasNewMsg: true, // 是否有新消息
-                isShowRouter: true,
-                msgNum: '10', // 新消息条数
-                userImg: require('../../assets/user.jpg'), // 用户图片
-                // 标签栏         标签标题     路由名称
-                // 数据格式 {text: '首页', name: 'Foo'}
-                tagsArry: [{text: '首页', name: 'Home'}],
-                arrowUp: false, // 用户详情向上箭头
-                arrowDown: true, // 用户详情向下箭头
-                isShowAsideTitle: true, // 是否展示侧边栏内容
-                main: null, // 页面主要内容区域
-                asideClassName: 'aside-big', // 控制侧边栏宽度变化
-                asideArrowIcons: [], // 缓存侧边栏箭头图标 收缩时用
-                // 由于iView的导航菜单比较坑 只能设定一个name参数
-                // 所以需要在这定义组件名称和标签栏标题的映射表 有多少个页面就有多少个映射条数
-                nameToTitle: {
-                    AddClass: '添加课程',
-                    Class1: "课程表",
-                    Class: "我的课程",
-                    T1: '表格',
-                    Password: '修改密码',
-                    UserInfo: '基本资料',
-                    Msg: '查看消息',
-                    Home: '首页'
-                }
-            }
-        },
-
-        created() {
-            // 已经为ajax请求设置了loading 请求前自动调用 请求完成自动结束
-            // 添加请求拦截器
-            this.$axios.interceptors.request.use(config => {
-                this.showLoading = true
-                // 在发送请求之前做些什么
-                return config
-            }, error => {
-                this.showLoading = false
-                // 对请求错误做些什么
-                return Promise.reject(error)
-            })
-
-            // 添加响应拦截器
-            this.$axios.interceptors.response.use(response => {
-                this.showLoading = false
-                // 对响应数据做点什么
-                return response
-            }, error => {
-                this.showLoading = false
-                // 对响应错误做点什么
-                return Promise.reject(error)
-            })
-
-
-            // 如果直接跳转到指定页面 没有对应的标签页 则添加
-            const name = this.$route.name
-            if (!this.keepAliveData.includes(name)) {
-                this.tagsArry.push({name, text: this.nameToTitle[name]})
-            }
-        },
-        mounted() {
-            this.main = document.querySelector('.sec-right')
-            this.asideArrowIcons = document.querySelectorAll('aside .ivu-icon-ios-arrow-down')
-            let w = document.documentElement.clientWidth || document.body.clientWidth
-            window.onresize = () => {
-                // 可视窗口宽度太小 自动收缩侧边栏
-                if (w < 1300 && this.isShowAsideTitle
-                    && w > (document.documentElement.clientWidth || document.body.clientWidth)) {
-                    this.shrinkAside()
-                }
-                w = document.documentElement.clientWidth || document.body.clientWidth
-            }
-        },
-        computed: {
-            // 需要缓存的路由
-            keepAliveData() {
-                return this.tagsArry.map(item => item.name)
-            }
-        },
-        methods: {
-            // 判断当前标签页是否激活状态
-            isActive(name) {
-                return this.$route.name === name
-            },
-            // 跳转页面 路由名称和参数
-            gotoPage(name, params) {
-                this.$router.replace({name, params})
-
-                if (!this.keepAliveData.includes(name)) {
-                    // 如果标签超过8个 则将第一个标签删除
-                    if (this.tagsArry.length == 8) {
-                        this.tagsArry.shift()
-                    }
-                    this.tagsArry.push({name, text: this.nameToTitle[name]})
-                }
-            },
-            // 用户操作
-            userOperate(name) {
-                switch (name) {
-                    case '1':
-                        // 修改密码
-                        this.gotoPage('Password')
-                        break
-                    case '2':
-                        // 基本资料
-                        this.gotoPage('UserInfo')
-                        break
-                    case '3':
-                        this.$router.replace({name: 'Login'})
-                        // 退出登陆
-                        break
-                }
-            },
-            // 控制用户三角箭头显示状态
-            showArrow(flag) {
-                this.arrowUp = flag
-                this.arrowDown = !flag
-            },
-            // 判断
-            isShrinkAside() {
-                this.isShowAsideTitle ? this.shrinkAside() : this.expandAside()
-            },
-            // 收缩
-            shrinkAside() {
-                this.asideArrowIcons.forEach(e => {
-                    e.style.display = 'none'
-                })
-                this.isShowAsideTitle = false
-                this.openMenus = []
-
-                this.$nextTick(() => {
-                    this.$refs.asideMenu.updateOpened()
-                })
-
-                setTimeout(() => {
-                    this.asideClassName = ''
-                    this.main.style.width = 'calc(100% - 80px)'
-                }, 0)
-            },
-            // 展开
-            expandAside() {
-                setTimeout(() => {
-                    this.isShowAsideTitle = true
-                    this.asideArrowIcons.forEach(e => {
-                        e.style.display = 'block'
-                    })
-                    this.openMenus = this.menuCache
-                    this.$nextTick(() => {
-                        this.$refs.asideMenu.updateOpened()
-                    })
-                }, 200)
-                this.asideClassName = 'aside-big'
-                this.main.style.width = 'calc(100% - 220px)'
-            },
-            // 刷新当前标签页
-            reloadPage() {
-                let name = this.$route.name
-                let index = this.keepAliveData.indexOf(name)
-
-                this.$nextTick(() => {
-                    if (this.tagsArry.length) {
-                        this.isShowRouter = false
-                        this.tagsArry.splice(index, 1)
-                        this.$nextTick(() => {
-                            this.tagsArry.splice(index, 0, {name, text: this.nameToTitle[name]})
-                            this.gotoPage(name)
-                            this.isShowRouter = true
-                        })
-                    } else {
-                        this.isShowRouter = false
-                        this.$nextTick(() => {
-                            this.tagsArry.push({name, text: this.nameToTitle[name]})
-                            this.gotoPage(name)
-                            this.isShowRouter = true
-                        })
-                    }
-                })
-            },
-            // 关闭单个标签
-            closeTag(i) {
-                let name = this.tagsArry[i].name
-                this.tagsArry.splice(i, 1)
-
-                event.stopPropagation()
-                // 如果关闭的是当前标签 则激活前一个标签
-                // 如果关闭的是第一个标签 则激活后一个标签
-                if (this.tagsArry.length) {
-                    if (this.isActive(name)) {
-                        if (i != 0) {
-                            this.gotoPage(this.tagsArry[i - 1].name)
-                        } else {
-                            this.gotoPage(this.tagsArry[i].name)
-                        }
-                    }
-                } else {
-                    // 如果没有标签则跳往首页
-                    if (name != 'Home') {
-                        this.gotoPage('Home')
-                    } else {
-                        this.reloadPage()
-                    }
-                }
-
-            },
-            // 根据路由名称关闭页面
-            closeName(name) {
-                for (let i = 0, len = this.tagsArry.length; i < len; i++) {
-                    if (this.tagsArry[i].name == name) {
-                        this.closeTag(i)
-                        break
-                    }
-                }
-            },
-            // 批量关闭标签
-            closeTags(flag) {
-                if (flag == 1) {
-                    // 关闭其他标签
-                    this.tagsArry = []
-                    this.gotoPage(this.$route.name)
-                } else {
-                    // 关闭所有标签
-                    this.tagsArry = []
-                    this.gotoPage('Home')
-                    this.reloadPage()
-                }
-            },
-            // 激活标签
-            activeTag(i) {
-                this.gotoPage(this.tagsArry[i].name)
-            },
-            // 消息通知
-            info() {
-                const self = this
-                this.$Notice.info({
-                    title: `您有${this.msgNum}条消息`,
-                    render(h) {
-                        return h('Button', {
-                            attrs: {
-                                type: 'info',
-                                size: 'small'
-                            },
-                            on: {
-                                click() {
-                                    // 点击查看跳转到消息页
-                                    self.gotoPage('Msg')
-                                    self.hasNewMsg = false,
-                                        self.msgNum = 0
-                                }
-                            }
-                        }, [
-                            '点击查看',
-                        ])
-                    }
-                })
-            },
-            // 菜单栏改变事件
-            menuChange(data) {
-                this.menuCache = data
-            },
-            security() {
-                console.log("测试");
-            }
+        myRole: this.$store.state.user,
+        openMenus: [], // 要打开的菜单名字 name属性
+        menuCache: [], // 缓存已经打开的菜单
+        showLoading: false, // 是否显示loading
+        hasNewMsg: true, // 是否有新消息
+        isShowRouter: true,
+        msgNum: '10', // 新消息条数
+        userImg: require('../../assets/user.jpg'), // 用户图片
+        // 标签栏         标签标题     路由名称
+        // 数据格式 {text: '首页', name: 'Foo'}
+        tagsArry: [{text: '首页', name: 'Home'}],
+        arrowUp: false, // 用户详情向上箭头
+        arrowDown: true, // 用户详情向下箭头
+        isShowAsideTitle: true, // 是否展示侧边栏内容
+        main: null, // 页面主要内容区域
+        asideClassName: 'aside-big', // 控制侧边栏宽度变化
+        asideArrowIcons: [], // 缓存侧边栏箭头图标 收缩时用
+        // 由于iView的导航菜单比较坑 只能设定一个name参数
+        // 所以需要在这定义组件名称和标签栏标题的映射表 有多少个页面就有多少个映射条数
+        nameToTitle: {
+          AddClass: '添加课程',
+          Class1: "课程表",
+          Class: "我的课程",
+          T1: '表格',
+          Password: '修改密码',
+          UserInfo: '基本资料',
+          Msg: '查看消息',
+          Home: '首页'
         }
+      }
+    },
+
+    created() {
+      // 已经为ajax请求设置了loading 请求前自动调用 请求完成自动结束
+      // 添加请求拦截器
+      this.$axios.interceptors.request.use(config => {
+        this.showLoading = true
+        // 在发送请求之前做些什么
+        return config
+      }, error => {
+        this.showLoading = false
+        // 对请求错误做些什么
+        return Promise.reject(error)
+      })
+
+      // 添加响应拦截器
+      this.$axios.interceptors.response.use(response => {
+        this.showLoading = false
+        // 对响应数据做点什么
+        return response
+      }, error => {
+        this.showLoading = false
+        // 对响应错误做点什么
+        return Promise.reject(error)
+      })
+
+
+      // 如果直接跳转到指定页面 没有对应的标签页 则添加
+      const name = this.$route.name
+      if (!this.keepAliveData.includes(name)) {
+        this.tagsArry.push({name, text: this.nameToTitle[name]})
+      }
+    },
+    mounted() {
+      this.main = document.querySelector('.sec-right')
+      this.asideArrowIcons = document.querySelectorAll('aside .ivu-icon-ios-arrow-down')
+      let w = document.documentElement.clientWidth || document.body.clientWidth
+      window.onresize = () => {
+        // 可视窗口宽度太小 自动收缩侧边栏
+        if (w < 1300 && this.isShowAsideTitle
+          && w > (document.documentElement.clientWidth || document.body.clientWidth)) {
+          this.shrinkAside()
+        }
+        w = document.documentElement.clientWidth || document.body.clientWidth
+      }
+    },
+    computed: {
+      // 需要缓存的路由
+      keepAliveData() {
+        return this.tagsArry.map(item => item.name)
+      }
+    },
+    methods: {
+      // 判断当前标签页是否激活状态
+      isActive(name) {
+        return this.$route.name === name
+      },
+      // 跳转页面 路由名称和参数
+      gotoPage(name, params) {
+        this.$router.replace({name, params})
+
+        if (!this.keepAliveData.includes(name)) {
+          // 如果标签超过8个 则将第一个标签删除
+          if (this.tagsArry.length == 8) {
+            this.tagsArry.shift()
+          }
+          this.tagsArry.push({name, text: this.nameToTitle[name]})
+        }
+      },
+      // 用户操作
+      userOperate(name) {
+        switch (name) {
+          case '1':
+            // 修改密码
+            this.gotoPage('Password')
+            break
+          case '2':
+            // 基本资料
+            this.gotoPage('UserInfo')
+            break
+          case '3':
+            this.$axios.get('/user/logout/' + this.$store.state.token);
+            this.$router.replace({name: 'Login'})
+            // 退出登陆
+            break
+        }
+      },
+      // 控制用户三角箭头显示状态
+      showArrow(flag) {
+        this.arrowUp = flag
+        this.arrowDown = !flag
+      },
+      // 判断
+      isShrinkAside() {
+        this.isShowAsideTitle ? this.shrinkAside() : this.expandAside()
+      },
+      // 收缩
+      shrinkAside() {
+        this.asideArrowIcons.forEach(e => {
+          e.style.display = 'none'
+        })
+        this.isShowAsideTitle = false
+        this.openMenus = []
+
+        this.$nextTick(() => {
+          this.$refs.asideMenu.updateOpened()
+        })
+
+        setTimeout(() => {
+          this.asideClassName = ''
+          this.main.style.width = 'calc(100% - 80px)'
+        }, 0)
+      },
+      // 展开
+      expandAside() {
+        setTimeout(() => {
+          this.isShowAsideTitle = true
+          this.asideArrowIcons.forEach(e => {
+            e.style.display = 'block'
+          })
+          this.openMenus = this.menuCache
+          this.$nextTick(() => {
+            this.$refs.asideMenu.updateOpened()
+          })
+        }, 200)
+        this.asideClassName = 'aside-big'
+        this.main.style.width = 'calc(100% - 220px)'
+      },
+      // 刷新当前标签页
+      reloadPage() {
+        let name = this.$route.name
+        let index = this.keepAliveData.indexOf(name)
+
+        this.$nextTick(() => {
+          if (this.tagsArry.length) {
+            this.isShowRouter = false
+            this.tagsArry.splice(index, 1)
+            this.$nextTick(() => {
+              this.tagsArry.splice(index, 0, {name, text: this.nameToTitle[name]})
+              this.gotoPage(name)
+              this.isShowRouter = true
+            })
+          } else {
+            this.isShowRouter = false
+            this.$nextTick(() => {
+              this.tagsArry.push({name, text: this.nameToTitle[name]})
+              this.gotoPage(name)
+              this.isShowRouter = true
+            })
+          }
+        })
+      },
+      // 关闭单个标签
+      closeTag(i) {
+        let name = this.tagsArry[i].name
+        this.tagsArry.splice(i, 1)
+
+        event.stopPropagation()
+        // 如果关闭的是当前标签 则激活前一个标签
+        // 如果关闭的是第一个标签 则激活后一个标签
+        if (this.tagsArry.length) {
+          if (this.isActive(name)) {
+            if (i != 0) {
+              this.gotoPage(this.tagsArry[i - 1].name)
+            } else {
+              this.gotoPage(this.tagsArry[i].name)
+            }
+          }
+        } else {
+          // 如果没有标签则跳往首页
+          if (name != 'Home') {
+            this.gotoPage('Home')
+          } else {
+            this.reloadPage()
+          }
+        }
+
+      },
+      // 根据路由名称关闭页面
+      closeName(name) {
+        for (let i = 0, len = this.tagsArry.length; i < len; i++) {
+          if (this.tagsArry[i].name == name) {
+            this.closeTag(i)
+            break
+          }
+        }
+      },
+      // 批量关闭标签
+      closeTags(flag) {
+        if (flag == 1) {
+          // 关闭其他标签
+          this.tagsArry = []
+          this.gotoPage(this.$route.name)
+        } else {
+          // 关闭所有标签
+          this.tagsArry = []
+          this.gotoPage('Home')
+          this.reloadPage()
+        }
+      },
+      // 激活标签
+      activeTag(i) {
+        this.gotoPage(this.tagsArry[i].name)
+      },
+      // 消息通知
+      info() {
+        const self = this
+        this.$Notice.info({
+          title: `您有${this.msgNum}条消息`,
+          render(h) {
+            return h('Button', {
+              attrs: {
+                type: 'info',
+                size: 'small'
+              },
+              on: {
+                click() {
+                  // 点击查看跳转到消息页
+                  self.gotoPage('Msg')
+                  self.hasNewMsg = false,
+                    self.msgNum = 0
+                }
+              }
+            }, [
+              '点击查看',
+            ])
+          }
+        })
+      },
+      // 菜单栏改变事件
+      menuChange(data) {
+        this.menuCache = data
+      },
+      security() {
+        console.log("测试");
+      }
     }
+  }
 </script>
 
 <style scoped>
