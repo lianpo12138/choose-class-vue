@@ -14,6 +14,8 @@ const Password = () => import('../components/Password/Password');
 const Msg = () => import('../components/Msg/Msg');
 const AddClass = () => import('../components/Msg/AddClass');
 const UserInfo = () => import('../components/UserInfo/UserInfo');
+const Classroom = () => import('../components/T1/Classroom');
+
 
 
 // 首页下的子组件
@@ -56,6 +58,11 @@ const children = [
         path: 'userinfo',
         name: 'UserInfo',
         component: UserInfo
+    },
+    {
+        path: 'classroom',
+        name: 'Classroom',
+        component: Classroom
     }
 ]
 

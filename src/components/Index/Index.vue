@@ -4,7 +4,7 @@
     <aside :class="asideClassName">
       <div class="logo-c">
         <img src="../../assets/logo.png" alt="logo" class="logo">
-        <span v-show="isShowAsideTitle">选课系统({{myRole}}端)</span>
+        <span v-show="isShowAsideTitle">选课系统{{this.myRole}}端</span>
       </div>
       <Menu ref="asideMenu" theme="dark" width="100%" @on-select="gotoPage"
             accordion :open-names="openMenus" active-name="Home" @on-open-change="menuChange">
@@ -62,7 +62,7 @@
             <span v-show="isShowAsideTitle">教室管理</span>
           </template>
           <MenuItem name="" v-if="myRole=='admin'">教室信息导入</MenuItem>
-          <MenuItem name="">教室课表查询</MenuItem>
+          <MenuItem name="Classroom">教室课表查询</MenuItem>
         </Submenu>
         <Submenu name="6" v-if="myRole!='admin'">
           <template slot="title">
@@ -163,7 +163,6 @@
     name: 'Index',
     data() {
       return {
-
         myRole: this.$store.state.user,
         openMenus: [], // 要打开的菜单名字 name属性
         menuCache: [], // 缓存已经打开的菜单
@@ -191,7 +190,8 @@
           Password: '修改密码',
           UserInfo: '基本资料',
           Msg: '查看消息',
-          Home: '首页'
+          Home: '首页',
+          Classroom: '教室课表查询'
         }
       }
     },
@@ -228,7 +228,9 @@
       }
     },
     mounted() {
-      this.main = document.querySelector('.sec-right')
+      if (this.$store.state.myRole) {
+      }
+      this.main = document.querySelector('.sec-right');
       this.asideArrowIcons = document.querySelectorAll('aside .ivu-icon-ios-arrow-down')
       let w = document.documentElement.clientWidth || document.body.clientWidth
       window.onresize = () => {

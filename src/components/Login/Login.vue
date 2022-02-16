@@ -3,7 +3,7 @@
     <div class="container">
       <p class="title">网上选课系统</p>
       <div class="input-c">
-        <Input prefix="ios-contact" v-model="loginuser.account" placeholder="用户名" clearable/>
+        <Input prefix="ios-contact" v-model="loginuser.account" placeholder="学号/工号" clearable/>
         <p class="error"></p>
       </div>
       <div class="input-c">
@@ -58,17 +58,16 @@
         },
         methods: {
             signin() {
-                axios.post('/user/login', {
+                this.$axios.post('/user/login', {
                     loginname: this.loginuser.account,
                     password: this.loginuser.pwd,
                     role: this.loginuser.role
                 }).then(rep => {
                     if (rep.data.success) {
-                        console.log(rep.data)
                         this.$store.commit('set', rep.data.content);
                         this.$router.replace('/index');
                     } else {
-                        this.$Message.error(rep.data.message);
+                      this.$Message.error(rep.data.message);
                     }
                 })
 
