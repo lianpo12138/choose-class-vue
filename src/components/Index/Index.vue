@@ -23,8 +23,9 @@
           <MenuItem v-show="isShowAsideTitle" name="T1">课程列表
           </MenuItem>
           <MenuItem name="Class" v-if="myRole=='student'">我的课程</MenuItem>
-          <MenuItem name="Class1" v-if="myRole!='admin'">课程表</MenuItem>
+          <MenuItem name="ClassTimetable" v-if="myRole!='admin'">课程表</MenuItem>
           <MenuItem name="UserInfo" v-if="myRole=='admin'">选课时间设置</MenuItem>
+          <MenuItem name="Uniform">教学周历</MenuItem>
           <MenuItem name="" v-if="myRole=='student'">选课结果查询</MenuItem>
         </Submenu>
         <Submenu name="2" v-if="myRole!='student'">
@@ -32,6 +33,7 @@
             <Icon type="ios-paper"/>
             <span v-show="isShowAsideTitle">课程管理</span>
           </template>
+          <MenuItem name="AddClass" v-if="myRole=='teacher'">添加课程</MenuItem>
           <MenuItem name="" v-if="myRole=='teacher'">我的任课</MenuItem>
           <MenuItem name="" v-if="myRole=='teacher'">任课表</MenuItem>
           <MenuItem name="" v-if="myRole=='admin'">课程审核</MenuItem>
@@ -142,7 +144,7 @@
         </ul>
       </div>
       <!-- 页面主体 -->
-      <div class="main-content">
+      <div class="main-content" >
         <div class="view-c">
           <keep-alive :include="keepAliveData">
             <router-view v-if="isShowRouter"/>
@@ -184,14 +186,15 @@
         // 所以需要在这定义组件名称和标签栏标题的映射表 有多少个页面就有多少个映射条数
         nameToTitle: {
           AddClass: '添加课程',
-          Class1: "课程表",
+          ClassTimetable: "课程表",
           Class: "我的课程",
           T1: '表格',
           Password: '修改密码',
           UserInfo: '基本资料',
           Msg: '查看消息',
           Home: '首页',
-          Classroom: '教室课表查询'
+          Classroom: '教室课表查询',
+          Uniform: '教学周历查询'
         }
       }
     },
@@ -228,8 +231,6 @@
       }
     },
     mounted() {
-      if (this.$store.state.myRole) {
-      }
       this.main = document.querySelector('.sec-right');
       this.asideArrowIcons = document.querySelectorAll('aside .ivu-icon-ios-arrow-down')
       let w = document.documentElement.clientWidth || document.body.clientWidth
@@ -480,6 +481,7 @@
     display: flex;
     flex-direction: column;
     transition: width .5s;
+
   }
 
 
@@ -614,12 +616,13 @@
     height: 100%;
     width: 100%;
     background: rgba(230, 230, 230, .5);
+
     padding: 15px;
   }
 
   .view-c {
     position: relative;
-    background: #fff;
+    background: rgba(255, 255, 255, 1);
     padding: 15px;
   }
 
