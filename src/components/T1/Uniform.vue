@@ -198,7 +198,6 @@
           friday: friday,
           saturday: saturday,
           sunday: sunday,
-          cellClassName: cellClassName
         })
       }
       let n = 1;
@@ -212,8 +211,30 @@
       this.monthmerge.push(this.data.length)
       this.data[0].instrotion = '1.2022年2月17日开学，2月18日正式上课。2.2月19-20日期初补(缓)考。3.第11周举行期中考试。4.2022年6月24日-7月3日举行期末考试，7月4日开始放假。';
 
-
+      this.data[0].cellClassName={
+        monday:'color1',
+        tuesday: 'color2',
+        wednesday: 'color3',
+        thursday: 'color1',
+        friday: 'color2',
+        saturday: 'color3',
+        sunday: 'color1',
+      }
       console.log(this.data)
+      for (let i = 0; i < this.data.length; i++) {
+        this.data[i].cellClassName={
+          monday:this.data[i].monday.substr(0,1)%2?'color1':'color2',
+          tuesday: this.data[i].tuesday.substr(0,1)%2?'color1':'color2',
+          wednesday: this.data[i].wednesday.substr(0,1)%2?'color1':'color2',
+          thursday: this.data[i].thursday.substr(0,1)%2?'color1':'color2',
+          friday: this.data[i].friday.substr(0,1)%2?'color1':'color2',
+          saturday: this.data[i].saturday.substr(0,1)%2?'color1':'color2',
+          sunday: this.data[i].sunday.substr(0,1)%2?'color1':'color2',
+          date:this.data[i].monday.substr(0,1)%2?'color1':'color2',
+        }
+
+      }
+
 
     }
   }
@@ -253,18 +274,18 @@
     font-size: large
   }
 
-  >>> .ivu-table .color1 {
-    background-color: #187;
+  /*>>> .ivu-table .color1 {*/
+    /*background-color: #187;*/
+    /*color: #fff;*/
+  /*}*/
+
+  >>> .ivu-table .color2 {
+    background-color: lightpink;
     color: #fff;
   }
 
   >>> .ivu-table .color1 {
-    background-color: #ff6600;
-    color: #fff;
-  }
-
-  >>> .ivu-table .color1 {
-    background-color: #2db7f5;
+    background-color: lightblue;
     color: #fff;
   }
 
