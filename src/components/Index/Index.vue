@@ -24,8 +24,8 @@
           </MenuItem>
           <MenuItem name="Class" v-if="myRole=='student'">我的课程</MenuItem>
           <MenuItem name="ClassTimetable" v-if="myRole!='admin'">课程表</MenuItem>
-          <MenuItem name="UserInfo" v-if="myRole=='admin'">选课时间设置</MenuItem>
           <MenuItem name="Uniform">教学周历</MenuItem>
+          <MenuItem name="UserInfo" v-if="myRole=='admin'">时间设置</MenuItem>
           <MenuItem name="" v-if="myRole=='student'">选课结果查询</MenuItem>
         </Submenu>
         <Submenu name="2" v-if="myRole!='student'">
@@ -465,8 +465,10 @@
   }
 
   .logo {
-    width: 40px;
-    margin-right: 10px;
+    height: 30px;
+    width: 30px;
+    margin: 10px;
+
   }
 
   .aside-big {

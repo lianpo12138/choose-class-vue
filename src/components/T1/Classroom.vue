@@ -87,7 +87,12 @@
                 return;
               }
             }
-          }, {
+          },
+          {
+            title: '容纳人数',
+            key: 'capacity'
+          },
+          {
             title: '操作',
             key: 'action',
             width: 150,

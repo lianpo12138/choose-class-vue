@@ -2,19 +2,18 @@
   <div>
     <div class="d1">
       <b>2021-2022 学年 第 2 学期 教学周历</b>
-      <Select v-model="model1" class="s1">
-        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      <Select v-model="term" class="s1" @on-change="chooseTerm">
+        <Option v-for="item in termList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <DatePicker v-if="this.$store.state.user=='admin'" type="daterange" placement="bottom-end" split-panels
-                  placeholder="设置该学期的开学日期和结束日期" class="d3"></DatePicker>
-      <Button type="info" @click="test" v-if="this.$store.state.user=='admin'">确定设置</Button>
+                  placeholder="修改该学期的开学日期和结束日期" class="d3"></DatePicker>
+      <Button type="info" @click="updateTerm" v-if="this.$store.state.user=='admin'">确认修改</Button>
     </div>
     <div class="d2">
 
     </div>
-    <Table :row-class-name="rowClassname" border :columns="columns" :data="data" :span-method="handSpan">
+    <Table border :columns="columns" :data="data" :span-method="handSpan">
     </Table>
-
   </div>
 </template>
 <script>
@@ -22,28 +21,8 @@
     name: "Uniform",
     data() {
       return {
-        cityList: [
-          {
-            value: '2021-2022-1',
-            label: '2021-2022-1'
-          },
-          {
-            value: '2020-2021-2',
-            label: '2020-2021-2'
-          },
-          {
-            value: '2020-2021-1',
-            label: '2020-2021-1'
-          },
-          {
-            value: '2019-2020-1',
-            label: '2019-2020-1'
-          },
-          {
-            value: '2018-2019-2',
-            label: '2018-2019-2'
-          }
-        ],
+        term: '2021-2022-2',
+        termList: [],
         columns: [
           {
             title: '月份',
@@ -100,29 +79,18 @@
 
         ],
         data: [],
-        model1: '2021-2022-1',
         begin: new Date(2022, 1, 17),
         end: new Date(),
-        monthmerge: [0]
+        monthmerge: [0],
+        periodList: []
       }
     },
     methods: {
-      test() {
-        console.log(this.monthmerge)
+      updateTerm() {
+
       },
       /* http://tool.bitefu.net/jiari/?d=2022-02&apikey=123465&info=2 免费查询节假日的接口
       *  文档地址  https://www.kancloud.cn/xiaoggvip/holiday_free/1606802*/
-      rowClassname(row, index) {
-        // console.log(index)
-        // if (index == 1) {
-        //   return 'demo-table-info-row';
-        //   console.log("进入了rowclassname方法")
-        // } else if (index == 3) {
-        //   return 'demo-table-error-row';
-        // }
-        // return '';
-      },
-
       /* 合并单元格的方法*/
       handSpan({row, column, rowIndex, columnIndex}) {
         for (let i = 0; i < this.monthmerge.length; i++) {
@@ -135,106 +103,144 @@
         if (columnIndex == 9 && rowIndex == 0) {
           return [this.data.length, 1]
         }
-      }
-    },
-    computed: {},
-    mounted() {
-      let d = this.begin.getDay();
-      let s = this.begin;
-      let month = "";
-      let monday = "";
-      let tuesday = "";
-      let wednesday = "";
-      let thursday = "";
-      let friday = "";
-      let saturday = "";
-      let sunday = "";
-      let cellClassName = {
-        month: "",
-        monday: "",
-        tuesday: "",
-        wednesday: "",
-        thursday: "",
-        friday: "",
-        saturday: "",
-        sunday: "",
-      }
-      for (let i = 0; i < 22; i++) {
-        if (i != 0) {
-          d = 1;
+      },
+      /* 生成日历数据，包括样式*/
+      generateData(){
+        /* 生成月份数据，以及改变样式*/
+        let d = this.begin.getDay();
+        let s = this.begin;
+        let month = "";
+        let monday = "";
+        let tuesday = "";
+        let wednesday = "";
+        let thursday = "";
+        let friday = "";
+        let saturday = "";
+        let sunday = "";
+        let cellClassName = {
+          month: "",
+          monday: "",
+          tuesday: "",
+          wednesday: "",
+          thursday: "",
+          friday: "",
+          saturday: "",
+          sunday: "",
         }
-        switch (d) {
-          case 1:
-            monday = s.getMonth() + 1 + "月" + s.getDate() + "日";
-            s.setDate(s.getDate() + 1);
-          case 2:
-            tuesday = s.getMonth() + 1 + "月" + s.getDate() + "日";
-            s.setDate(s.getDate() + 1);
-          case 3:
-            wednesday = s.getMonth() + 1 + "月" + s.getDate() + "日";
-            s.setDate(s.getDate() + 1);
-          case 4:
-            thursday = s.getMonth() + 1 + "月" + s.getDate() + "日";
-            s.setDate(s.getDate() + 1);
-          case 5:
-            friday = s.getMonth() + 1 + "月" + s.getDate() + "日";
-            s.setDate(s.getDate() + 1);
-          case 6:
-            saturday = s.getMonth() + 1 + "月" + s.getDate() + "日";
-            s.setDate(s.getDate() + 1);
-          case 7:
-            sunday = s.getMonth() + 1 + "月" + s.getDate() + "日";
-            s.setDate(s.getDate() + 1);
-            month = s.getMonth() + 1;
-        }
+        for (let i = 0; i < 22; i++) {
+          if (i != 0) {
+            d = 1;
+          }
+          switch (d) {
+            case 1:
+              monday = s.getMonth() + 1 + "月" + s.getDate() + "日";
+              s.setDate(s.getDate() + 1);
+            case 2:
+              tuesday = s.getMonth() + 1 + "月" + s.getDate() + "日";
+              s.setDate(s.getDate() + 1);
+            case 3:
+              wednesday = s.getMonth() + 1 + "月" + s.getDate() + "日";
+              s.setDate(s.getDate() + 1);
+            case 4:
+              thursday = s.getMonth() + 1 + "月" + s.getDate() + "日";
+              s.setDate(s.getDate() + 1);
+            case 5:
+              friday = s.getMonth() + 1 + "月" + s.getDate() + "日";
+              s.setDate(s.getDate() + 1);
+            case 6:
+              saturday = s.getMonth() + 1 + "月" + s.getDate() + "日";
+              s.setDate(s.getDate() + 1);
+            case 7:
+              sunday = s.getMonth() + 1 + "月" + s.getDate() + "日";
+              s.setDate(s.getDate() + 1);
+              month = s.getMonth() + 1;
+          }
 
-        this.data.push({
-          date: i + 1,
-          month: month,
-          monday: monday,
-          tuesday: tuesday,
-          wednesday: wednesday,
-          thursday: thursday,
-          friday: friday,
-          saturday: saturday,
-          sunday: sunday,
+          this.data.push({
+            date: i + 1,
+            month: month,
+            monday: monday,
+            tuesday: tuesday,
+            wednesday: wednesday,
+            thursday: thursday,
+            friday: friday,
+            saturday: saturday,
+            sunday: sunday,
+          })
+        }
+        let n = 1;
+        /* 将合并单元格的数据重置*/
+        this.monthmerge = [0];
+        for (let i = 1; i < this.data.length - 1; i++) {
+          if (this.data[i].monday.split("月")[0] == this.data[i + 1].monday.split("月")[0]) {
+            n++;
+          } else {
+            this.monthmerge.push(++n);
+          }
+        }
+        this.monthmerge.push(this.data.length)
+
+        this.data[0].instrotion = '1.2022年2月17日开学，2月18日正式上课。2.2月19-20日期初补(缓)考。3.第11周举行期中考试。4.2022年6月24日-7月3日举行期末考试，7月4日开始放假。';
+
+        for (let i = 0; i < this.data.length; i++) {
+          this.data[i].cellClassName={
+            monday:this.data[i].monday.split("月")[0]%2?'color1':'color2',
+            tuesday: this.data[i].tuesday.split("月")[0]%2?'color1':'color2',
+            wednesday: this.data[i].wednesday.split("月")[0]%2?'color1':'color2',
+            thursday: this.data[i].thursday.split("月")[0]%2?'color1':'color2',
+            friday: this.data[i].friday.split("月")[0]%2?'color1':'color2',
+            saturday: this.data[i].saturday.split("月")[0]%2?'color1':'color2',
+            sunday: this.data[i].sunday.split("月")[0]%2?'color1':'color2',
+            date:this.data[i].monday.split("月")[0]%2?'color1':'color2',
+            month:this.data[i].monday.split("月")[0]%2?'color1':'color2'
+          }
+        }
+      },
+      /* 获取所有的学期信息集合*/
+      getPeriod() {
+        this.$axios.get("user/term").then(resp=>{
+
+          this.periodList=resp.data.content
+          this.periodList.forEach(item => {
+            if (item.type == 1) {
+              this.termList.push({
+                value:item.term,
+                label:item.term,
+              });
+            }
+
+          });
+        });
+
+      },
+      /* 选择其他学期调用的方法*/
+      chooseTerm() {
+        let remark = "";
+        this.periodList.forEach(it=>{
+          if (it.term == this.term) {
+            this.begin = new Date(it.stratdate);
+            remark = it.remark;
+          }
         })
-      }
-      let n = 1;
-      for (let i = 1; i < this.data.length - 1; i++) {
-        if (this.data[i].monday.substr(0, 1) == this.data[i + 1].monday.substr(0, 1)) {
-          n++;
-        } else {
-          this.monthmerge.push(++n);
-        }
-      }
-      this.monthmerge.push(this.data.length)
-      this.data[0].instrotion = '1.2022年2月17日开学，2月18日正式上课。2.2月19-20日期初补(缓)考。3.第11周举行期中考试。4.2022年6月24日-7月3日举行期末考试，7月4日开始放假。';
 
-      this.data[0].cellClassName={
-        monday:'color1',
-        tuesday: 'color2',
-        wednesday: 'color3',
-        thursday: 'color1',
-        friday: 'color2',
-        saturday: 'color3',
-        sunday: 'color1',
-      }
-      console.log(this.data)
-      for (let i = 0; i < this.data.length; i++) {
-        this.data[i].cellClassName={
-          monday:this.data[i].monday.substr(0,1)%2?'color1':'color2',
-          tuesday: this.data[i].tuesday.substr(0,1)%2?'color1':'color2',
-          wednesday: this.data[i].wednesday.substr(0,1)%2?'color1':'color2',
-          thursday: this.data[i].thursday.substr(0,1)%2?'color1':'color2',
-          friday: this.data[i].friday.substr(0,1)%2?'color1':'color2',
-          saturday: this.data[i].saturday.substr(0,1)%2?'color1':'color2',
-          sunday: this.data[i].sunday.substr(0,1)%2?'color1':'color2',
-          date:this.data[i].monday.substr(0,1)%2?'color1':'color2',
-        }
+        this.data = [];
+        this.generateData();
+
 
       }
 
+
+    },
+    watch: {
+      'this.term': function () {
+        console.log("term变了")
+
+      }
+
+    },
+    mounted() {
+      this.getPeriod();
+      this.generateData();
 
     }
   }
@@ -281,12 +287,10 @@
 
   >>> .ivu-table .color2 {
     background-color: lightpink;
-    color: #fff;
   }
 
   >>> .ivu-table .color1 {
     background-color: lightblue;
-    color: #fff;
   }
 
 

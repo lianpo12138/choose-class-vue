@@ -5,22 +5,28 @@ Vue.use(Router)
 
 const Login = () => import('../components/Login/Login');
 const Index = () => import('../components/Index/Index');
+const Test = () => import('../components/test');
 
 const Home = () => import('../components/Home/Home');
 const T1 = () => import('../components/T1/T1');
-const Class1 = () => import('../components/T1/Class1');
+const ClassTimetable = () => import('../components/T1/ClassTimetable');
 const Class = () => import('../components/T1/Class');
 const Password = () => import('../components/Password/Password');
 const Msg = () => import('../components/Msg/Msg');
 const AddClass = () => import('../components/Msg/AddClass');
 const UserInfo = () => import('../components/UserInfo/UserInfo');
 const Classroom = () => import('../components/T1/Classroom');
+const Uniform = () => import('../components/T1/Uniform')
 
 
 
 // 首页下的子组件
 const children = [
     {
+        path: 'test',
+        name: 'Test',
+        component: Test
+    },{
         path: '',
         name: 'Home',
         component: Home
@@ -35,9 +41,9 @@ const children = [
         component: AddClass
     },
     {
-        path: 'class1',
-        name: 'Class1',
-        component: Class1
+        path: 'classtimetable',
+        name: 'ClassTimetable',
+        component: ClassTimetable
     },
     {
         path: 'class',
@@ -63,6 +69,10 @@ const children = [
         path: 'classroom',
         name: 'Classroom',
         component: Classroom
+    },{
+        path: 'uniform',
+        name: 'Uniform',
+        component: Uniform
     }
 ]
 

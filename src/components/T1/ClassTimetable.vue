@@ -1,13 +1,10 @@
 <template>
   <div>
-    <div class="query-c">
-      <div>
+      <div style="color:skyblue;font-size: large">
         <span>{{nowWeek}}</span>
         <span>{{nowDate}}</span>
         <span>{{nowTime}}</span>
       </div>
-    </div>
-    <br>
     <Table border stripe :columns="columns" :data="data">
     </Table>
     <tr><th style="font-size: large">备注：</th><td>专业实习</td></tr>
@@ -28,7 +25,21 @@
         columns: [
           {
             title: '时间',
-            key: 'time'
+            align: 'center',
+            width: 150,
+            render: (h, params) => {
+              console.log(this.nowWeek)
+              let Num = ["一", "二", "三", "四", "五", "六"];
+              let time = ["08:00-09:40", "10:00-11:40", "14:20-16:00", "16:20-18:00", "19:30-21:10","21:20-23:00"];
+              let s = (2 * params.index + 1);
+              let p1 = "第" + Num[params.index] + "大节";
+              let p2 = "（"+s+","+(s+1)+ "小节）";
+              let p3 = time[params.index];
+
+              return h('div',{},
+                [h('br',{},),h('p',{},p1),h('p',{},p2),h('p',{},p3),h('br',{},),]
+              );
+            }
           }, {
             title: '周日',
             key: 'sunday'
@@ -58,28 +69,10 @@
           },
 
         ],
-        data: [
-          {
-            time: '第一节（8:00-8:40）'
-          }, {
-            time: '第二节（8:50-9:30）'
-          }, {
-            time: '第三节（10:00-10:40）'
-          }, {
-            time: '第四节（11:00-11:40）'
-          }, {
-            time: '第五节（14:00-14:40）'
-          }, {
-            time: '第六节（14:50-15:30）'
-          }, {
-            time: '第七节（16:00-16:40）'
-          }, {
-            time: '第八节（16:50-17:30）'
-          }
-        ]
+        data: [{},{},{},{},{},{}]
       }
     },
-    mounted() {
+    created() {
       var _this = this;
       this.timer = setInterval(() => {
         this.setNowTimes();

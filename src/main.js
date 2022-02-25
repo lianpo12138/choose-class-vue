@@ -1,10 +1,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import iView from 'iview'
+import iView from 'view-design'
 import axios from 'axios'
 import store from "./store";
-import 'iview/dist/styles/iview.css'
+import 'view-design/dist/styles/iview.css';
 
 Vue.config.productionTip = false;
 Vue.use(iView);

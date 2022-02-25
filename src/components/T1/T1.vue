@@ -1,104 +1,104 @@
 <template>
-    <div>
-        <div class="query-c">
-            查询：
-            <Input search placeholder="请输入查询内容" style="width: auto"  />
-        </div>
-        <br>
-        <Table border stripe :columns="columns1" :data="data1"></Table>
-        <br>
-        <Page :total="100" show-sizer show-elevator/>
+  <div>
+    <div class="query-c">
+      查询：
+      <Input search placeholder="请输入查询内容" style="width: auto"/>
     </div>
+    <br>
+    <Table border stripe :columns="columns" :data="data"></Table>
+    <br>
+    <Page :total="req.total"
+          :current="req.pageNum"
+          :page-size="req.pageSize"
+          @on-change="pNumChange"
+          @on-page-size-change="pSizeChange"
+          show-sizer show-elevator show-total=""/>
+  </div>
 </template>
 
 <script>
-export default {
+  export default {
     name: 'T1',
     data() {
-        return {
-            columns1: [
-                {
-                    title: '课程编号',
-                    key: 'id'
-                },{
-                    title: '课程名称',
-                    key: 'name'
-                },
-                {
-                    title: '教师名称',
-                    key: 'teacher'
-                },
-                {
-                    title: '地点',
-                    key: 'position'
-                },
-                {
-                    title: '上课时间',
-                    key: 'time'
-                }, {
-                    title: '人数限制',
-                    key: 'maxnum'
-                },
-                {
-                    title: '已选人数',
-                    key: 'nownum'
-                }
-            ],
-            data1: [
-                {
-                    id : 1,
-                    name: '英语短剧',
-                    teacher: '黄庆芳',
-                    position: '英语智慧教室（融创楼三楼）',
-                    maxnum: 20,
-                    nownum: 5,
-                    time: '周三12节'
-                },{
-                    id : 2,
-                    name: '英语趣配音',
-                    teacher: '张文珍',
-                    position: '初一（1）班教室（融知楼一楼）',
-                    maxnum: 20,
-                    nownum: 6,
-                    time: '周四34节'
-                },{
-                    id : 3,
-                    name: '主持人',
-                    teacher: '吴利萍',
-                    position: '初一（2）班教室（融知楼一楼）',
-                    maxnum: 20,
-                    nownum: 1,
-                    time: '周四34节'
-                },{
-                    id : 4,
-                    name: '经典诵读',
-                    teacher: '吴俊达',
-                    position: '初一（3）班教室（融知楼一楼）',
-                    maxnum: 20,
-                    nownum: 0,
-                    time: '周四34节'
-                },{
-                    id : 5,
-                    name: '释放压力走进心灵',
-                    teacher: '汪艳',
-                    position: '团体辅导室（融创楼六楼）',
-                    maxnum: 20,
-                    nownum: 14,
-                    time: '周四34节'
-                },{
-                    id : 6,
-                    name: '趣味物理小实验',
-                    teacher: '万中伟',
-                    position: '物理实验室2（融创楼二楼',
-                    maxnum: 20,
-                    nownum: 20,
-                    time: '周四34节'
-                }
-
-            ]
+      return {
+        columns: [
+          {
+            title: '课程编号',
+            key: 'id'
+          }, {
+            title: '课程名称',
+            key: 'classname'
+          },
+          {
+            title: '教师名称',
+            key: 'teachername'
+          }, {
+            title: '教师职称',
+            key: 'academicTitle'
+          },
+          {
+            title: '上课时间',
+            key: 'simpleTime'
+          }, {
+            title: '人数限制',
+            key: 'planNum'
+          },
+          {
+            title: '已选人数',
+            key: 'realityNum'
+          }
+        ],
+        data: [],
+        req:{
+          classname: "",
+          pageNum: 1,
+          pageSize:10,
+          total:0
         }
+
+
+
+      }
+    },
+    mounted() {
+      this.list();
+    },
+    methods: {
+      list() {
+        this.$axios.get("/class/list",{
+          params:{
+            classname: this.req.classname,
+            pageNum: this.req.pageNum,
+            pageSize: this.req.pageSize
+          }
+          }
+        ).then(
+        resp=>{
+
+
+          this.data = resp.data.content.list;
+          for (let i = 0; i < this.data.length; i++) {
+            this.data[i].teachername = resp.data.content.list[i].teacher.realname;
+            this.data[i].academicTitle = resp.data.content.list[i].teacher.academicTitle;
+
+          }
+          this.req.total = resp.data.content.total;
+        }
+      )
+      },
+
+      pNumChange(i) {
+        this.req.pageNum = i;
+        this.list()
+      },
+
+      pSizeChange(i) {
+        this.req.pageSize = i;
+        this.list()
+
+      }
     }
-}
+  }
 </script>
 
 <style scoped>
