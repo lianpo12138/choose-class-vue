@@ -1,6 +1,6 @@
 <template>
   <div>
-    <span>注意事项：设置日期的格式为  <b style="font-size: medium">2020-1-1</b></span>
+    <span>注意事项：设置日期的格式为  <b style="font-size: medium">2020-01-01</b></span>
     <Table :columns="columns" :data="data" border>
       <template slot-scope="{ row, index }" slot="id">
         {{ row.id}}
@@ -36,8 +36,12 @@
                   confirm transfer>
             <Button>确认</Button>
           </poptip>
-
-          <Button @click="editIndex = -1">取消</Button>
+          <Poptip title="确认删除数据吗?"
+                  @on-ok="deleteTerm(row,index)"
+                  @on-cancel="editIndex = -1"
+                  confirm transfer>
+          <Button>删除</Button>
+            </poptip>
         </div>
         <div v-else>
           <Button @click="handleEdit(row, index)">修改</Button>
@@ -109,19 +113,30 @@
         this.data[index].chooseStartDate = this.editChooseStartDate;
         this.data[index].chooseEndDate = this.editChooseEndDate;
 
-        console.log(this.data[index])
+        this.$axios.post("/user/update",{
+          id: this.data[index].id,
+          termStartDate:new Date(this.editTermStartDate),
+          termEndDate:new Date(this.editTermEndDate),
+          chooseStartDate:new Date(this.editChooseStartDate),
+          chooseEndDate:new Date(this.editChooseEndDate),
+        }).then(resp=>{
+          this.$Message.success("修改成功！")
+        })
         this.editIndex = -1;
-
-
       },
       updateTerm() {
-        this.data.push({
-          id: 1,
-          term: '2021-2022-1',
-          termStartDate: 'dfs',
-          termEndDate: 'adsf',
-          chooseStartDate: 'asdf',
-          chooseEndDate: 'asdf',
+        let a=this.data[this.data.length - 1].term.split("-")
+        let term =""
+        if (a[2] == 1) {
+          term = a[0] + "-" + a[1] + "-2";
+        } else {
+          term = ++a[0] + "-" + (++a[1]) + "-1";
+        }
+
+        this.$axios.post("/user/update",{
+          term: term
+        }).then(resp=>{
+          this.data.push(resp.data)
         })
       },
       getTermData() {
@@ -129,11 +144,10 @@
             this.data = rep.data.content
             this.data.forEach(it => {
               it.termStartDate =it.termStartDate==null?null: this.getFormalDate(it.termStartDate)
-              it.termEndDate = it.termEndDate=null?null:this.getFormalDate(it.termEndDate)
+              it.termEndDate = it.termEndDate==null?null:this.getFormalDate(it.termEndDate)
               it.chooseStartDate = it.chooseStartDate==null?null:this.getFormalDate(it.chooseStartDate)
               it.chooseEndDate = it.chooseEndDate==null?null:this.getFormalDate(it.chooseEndDate)
             })
-          console.log(this.data)
           }
         )
       },
@@ -141,7 +155,17 @@
         let date = new Date(i);
         let formalDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
         return formalDate;
+      },
+      deleteTerm(row, index) {
+
+        this.$axios.delete("/user/"+row.id).then(resp=>{
+          this.$Message.success("删除成功！")
+        })
+        this.data.splice(index,1)
+        this.editIndex = -1;
+
       }
+
     },
     mounted() {
       this.getTermData();

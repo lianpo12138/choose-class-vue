@@ -17,6 +17,7 @@ const AddClass = () => import('../components/Msg/AddClass');
 const UserInfo = () => import('../components/UserInfo/UserInfo');
 const Classroom = () => import('../components/T1/Classroom');
 const Uniform = () => import('../components/T1/Uniform')
+const TimeSet = () => import('../components/T1/TimeSet')
 
 
 
@@ -73,6 +74,10 @@ const children = [
         path: 'uniform',
         name: 'Uniform',
         component: Uniform
+    },{
+        path: 'timeset',
+        name: 'TimeSet',
+        component: TimeSet
     }
 ]
 

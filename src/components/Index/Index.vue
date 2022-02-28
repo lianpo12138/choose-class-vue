@@ -25,7 +25,7 @@
           <MenuItem name="Class" v-if="myRole=='student'">我的课程</MenuItem>
           <MenuItem name="ClassTimetable" v-if="myRole!='admin'">课程表</MenuItem>
           <MenuItem name="Uniform">教学周历</MenuItem>
-          <MenuItem name="UserInfo" v-if="myRole=='admin'">时间设置</MenuItem>
+          <MenuItem name="TimeSet" v-if="myRole=='admin'">时间设置</MenuItem>
           <MenuItem name="" v-if="myRole=='student'">选课结果查询</MenuItem>
         </Submenu>
         <Submenu name="2" v-if="myRole!='student'">
@@ -194,7 +194,8 @@
           Msg: '查看消息',
           Home: '首页',
           Classroom: '教室课表查询',
-          Uniform: '教学周历查询'
+          Uniform: '教学周历查询',
+          TimeSet:'时间设置'
         }
       }
     },
