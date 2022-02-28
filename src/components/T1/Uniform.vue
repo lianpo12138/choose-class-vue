@@ -1,13 +1,10 @@
 <template>
   <div>
     <div class="d1">
-      <b>2021-2022 学年 第 2 学期 教学周历</b>
+      <b>{{term.split("-")[0]}}- {{term.split("-")[1]}}学年 第 {{term.split("-")[2]}} 学期 教学周历</b>
       <Select v-model="term" class="s1" @on-change="chooseTerm">
         <Option v-for="item in termList" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
-      <DatePicker v-if="this.$store.state.user=='admin'" type="daterange" placement="bottom-end" split-panels
-                  placeholder="修改该学期的开学日期和结束日期" class="d3"></DatePicker>
-      <Button type="info" @click="updateTerm" v-if="this.$store.state.user=='admin'">确认修改</Button>
     </div>
     <div class="d2">
 
@@ -21,7 +18,7 @@
     name: "Uniform",
     data() {
       return {
-        term: '2021-2022-2',
+        term: '',
         termList: [],
         columns: [
           {
@@ -79,16 +76,13 @@
 
         ],
         data: [],
-        begin: new Date(2022, 1, 17),
+        begin: new Date(),
         end: new Date(),
         monthmerge: [0],
         periodList: []
       }
     },
     methods: {
-      updateTerm() {
-
-      },
       /* http://tool.bitefu.net/jiari/?d=2022-02&apikey=123465&info=2 免费查询节假日的接口
       *  文档地址  https://www.kancloud.cn/xiaoggvip/holiday_free/1606802*/
       /* 合并单元格的方法*/
@@ -192,7 +186,7 @@
             saturday: this.data[i].saturday.split("月")[0]%2?'color1':'color2',
             sunday: this.data[i].sunday.split("月")[0]%2?'color1':'color2',
             date:this.data[i].monday.split("月")[0]%2?'color1':'color2',
-            month:this.data[i].monday.split("月")[0]%2?'color1':'color2'
+            month:this.data[i].sunday.split("月")[0]%2?'color1':'color2'
           }
         }
       },
@@ -200,25 +194,29 @@
       getPeriod() {
         this.$axios.get("user/term").then(resp=>{
 
+
           this.periodList=resp.data.content
           this.periodList.forEach(item => {
-            if (item.type == 1) {
               this.termList.push({
                 value:item.term,
                 label:item.term,
               });
-            }
-
           });
-        });
 
+          this.term=this.periodList[this.periodList.length-1].term
+
+
+        });
       },
       /* 选择其他学期调用的方法*/
       chooseTerm() {
         let remark = "";
+        console.log(this.term)
+        console.log(this.periodList)
         this.periodList.forEach(it=>{
           if (it.term == this.term) {
-            this.begin = new Date(it.stratdate);
+
+            this.begin = new Date(it.termStartDate);
             remark = it.remark;
           }
         })

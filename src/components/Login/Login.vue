@@ -2,86 +2,87 @@
   <div class="login-vue" :style="bg">
     <div class="container">
       <p class="title">网上选课系统</p>
-      <div class="input-c">
-        <Input prefix="ios-contact" v-model="loginuser.account" placeholder="学号/工号" clearable/>
-        <p class="error"></p>
-      </div>
-      <div class="input-c">
-        <Input type="password" v-model="loginuser.pwd" prefix="md-lock" placeholder="密码" clearable/>
-        <p class="error">{{pwdError}}</p>
-      </div>
-      <div>
-        <Radio-group v-model="loginuser.role">
-          <Radio label="student"  class="radio-a" aria-checked="true">学生</Radio>
-          <Radio label="teacher" class="radio-a" >老师</Radio>
-          <Radio label="admin" class="radio-a">管理员</Radio>
-        </Radio-group>
-      </div>
-<br>
-      <Button :loading="isShowLoading" class="submit" type="primary" @click="signin">登陆</Button>
-      <p class="account"> <span @click="forgetPwd">忘记密码</span></p>
+        <div class="input-c">
+          <Input prefix="ios-contact" v-model="loginuser.account" placeholder="学号/工号" clearable/>
+          <p class="error"></p>
+        </div>
+        <div class="input-c">
+          <Input type="password" v-model="loginuser.pwd" prefix="md-lock" placeholder="密码" clearable/>
+          <p class="error">{{pwdError}}</p>
+        </div>
+        <div>
+          <Radio-group v-model="loginuser.role">
+            <Radio label="student" class="radio-a" aria-checked="true">学生</Radio>
+            <Radio label="teacher" class="radio-a">老师</Radio>
+            <Radio label="admin" class="radio-a">管理员</Radio>
+          </Radio-group>
+        </div>
+        <br>
+        <Button :loading="isShowLoading" class="submit" type="primary" @click="signin">登陆</Button>
+        <p class="account"><span @click="forgetPwd">忘记密码</span></p>
+
     </div>
 
   </div>
 </template>
 
 <script>
-    import axios from "axios";
+  import axios from "axios";
 
-    export default {
-        name: 'Login',
-        data() {
-            return {
-                loginuser:{
-                    account: '',
-                    pwd: '',
-                    role: 'student'
-                }
-                ,
-                accountError: '',
-                pwdError: '',
-                isShowLoading: false,
-                bg: {},
-                info:''
-            }
-        },
-        created() {
-            this.bg.backgroundImage = 'url(' + require('../../assets/bg0'+new Date().getDay()+'.jpg');
-        },
-        mounted() {
-            document.onkeydown = e => {
-                // 监听回车事件
-                if (e.keyCode == 13) {
-                    this.signin()
-                }
-            }
-        },
-        methods: {
-            signin() {
-                this.$axios.post('/user/login', {
-                    loginname: this.loginuser.account,
-                    password: this.loginuser.pwd,
-                    role: this.loginuser.role
-                }).then(rep => {
-                    if (rep.data.success) {
-                        this.$store.commit('set', rep.data.content);
-                        this.$router.replace('/index');
-                    } else {
-                      this.$Message.error(rep.data.message);
-                    }
-                })
-
-            }
-            ,
-            register() {
-                console.log('注册账号')
-            },
-            forgetPwd() {
-                alert('忘记密码')
-            }
-
+  export default {
+    name: 'Login',
+    data() {
+      return {
+        loginuser: {
+          account: '',
+          pwd: '',
+          role: 'student'
         }
+        ,
+        accountError: '',
+        pwdError: '',
+        isShowLoading: false,
+        bg: {},
+        info: ''
+      }
+    },
+    created() {
+      this.bg.backgroundImage = 'url(' + require('../../assets/bg0' + new Date().getDay() + '.jpg');
+    },
+    mounted() {
+      document.onkeydown = e => {
+          // Login页面才监听回车事件
+          if (window.event.keyCode   == 13) {
+            this.$route.name === 'Login' ? this.signin() : '';
+          }
+      }
+    },
+    methods: {
+      signin() {
+        this.$axios.post('/user/login', {
+          loginname: this.loginuser.account,
+          password: this.loginuser.pwd,
+          role: this.loginuser.role
+        }).then(rep => {
+          if (rep.data.success) {
+            this.$store.commit('set', rep.data.content);
+            this.$router.replace('/index');
+          } else {
+            this.$Message.error(rep.data.message);
+          }
+        })
+
+      }
+      ,
+      register() {
+        console.log('注册账号')
+      },
+      forgetPwd() {
+        alert('忘记密码')
+      }
+
     }
+  }
 </script>
 
 <style>
@@ -163,6 +164,7 @@
   .login-vue .ivu-icon-ios-close-circle {
     color: #777;
   }
+
   .login-vue .radio-a {
     background: transparent;
     color: #fff;
