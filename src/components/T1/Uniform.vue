@@ -174,7 +174,6 @@
         }
         this.monthmerge.push(this.data.length)
 
-        this.data[0].instrotion = '1.2022年2月17日开学，2月18日正式上课。2.2月19-20日期初补(缓)考。3.第11周举行期中考试。4.2022年6月24日-7月3日举行期末考试，7月4日开始放假。';
 
         for (let i = 0; i < this.data.length; i++) {
           this.data[i].cellClassName={
@@ -211,18 +210,17 @@
       /* 选择其他学期调用的方法*/
       chooseTerm() {
         let remark = "";
-        console.log(this.term)
-        console.log(this.periodList)
         this.periodList.forEach(it=>{
           if (it.term == this.term) {
-
             this.begin = new Date(it.termStartDate);
             remark = it.remark;
+            console.log(remark)
           }
         })
-
         this.data = [];
         this.generateData();
+        this.data[0].instrotion = remark;
+
 
 
       }
