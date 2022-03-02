@@ -43,8 +43,8 @@
             <Icon type="ios-paper"/>
             <span v-show="isShowAsideTitle">教师管理</span>
           </template>
-          <MenuItem name="Msg">教师导入</MenuItem>
-          <MenuItem name="Msg">教师列表</MenuItem>
+          <MenuItem name="AddTeacher">教师导入</MenuItem>
+          <MenuItem name="Teacher">教师列表</MenuItem>
 
         </Submenu>
 
@@ -195,7 +195,11 @@
           Home: '首页',
           Classroom: '教室课表查询',
           Uniform: '教学周历查询',
-          TimeSet:'时间设置'
+          TimeSet:'时间设置',
+          Teacher:'教室列表',
+          AddTeacher:'教师导入'
+
+
         }
       }
     },

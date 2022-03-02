@@ -18,6 +18,8 @@ const UserInfo = () => import('../components/UserInfo/UserInfo');
 const Classroom = () => import('../components/T1/Classroom');
 const Uniform = () => import('../components/T1/Uniform')
 const TimeSet = () => import('../components/T1/TimeSet')
+const Teacher = () => import('../components/T1/Teacher')
+const AddTeacher = () => import('../components/UserInfo/AddTeacher')
 
 
 
@@ -78,6 +80,14 @@ const children = [
         path: 'timeset',
         name: 'TimeSet',
         component: TimeSet
+    },{
+        path: 'teacher',
+        name: 'Teacher',
+        component: Teacher
+    },{
+        path: 'addteacher',
+        name: 'AddTeacher',
+        component: AddTeacher
     }
 ]
 
