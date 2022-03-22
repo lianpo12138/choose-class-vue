@@ -4,7 +4,7 @@
     <aside :class="asideClassName">
       <div class="logo-c">
         <img src="../../assets/logo.png" alt="logo" class="logo">
-        <span v-show="isShowAsideTitle">选课系统{{this.myRole}}端</span>
+        <span v-show="isShowAsideTitle">选课系统</span>
       </div>
       <Menu ref="asideMenu" theme="dark" width="100%" @on-select="gotoPage"
             accordion :open-names="openMenus" active-name="Home" @on-open-change="menuChange">
@@ -54,16 +54,14 @@
             <Icon type="ios-paper"/>
             <span v-show="isShowAsideTitle">学生管理</span>
           </template>
-          <MenuItem name="">学生列表</MenuItem>
-          <MenuItem name="" v-if="myRole=='admin'">学生信息修改</MenuItem>
-          <MenuItem name="">学生选课情况</MenuItem>
+          <MenuItem name="Student">学生列表</MenuItem>
+          <MenuItem name="Degree">学生选课情况</MenuItem>
         </Submenu>
         <Submenu name="5">
           <template slot="title">
             <Icon type="ios-paper"/>
             <span v-show="isShowAsideTitle">教室管理</span>
           </template>
-          <MenuItem name="" v-if="myRole=='admin'">教室信息导入</MenuItem>
           <MenuItem name="Classroom">教室课表查询</MenuItem>
         </Submenu>
         <Submenu name="6" v-if="myRole!='admin'">
@@ -197,7 +195,9 @@
           Uniform: '教学周历查询',
           TimeSet:'时间设置',
           Teacher:'教室列表',
-          AddTeacher:'教师导入'
+          AddTeacher:'教师导入',
+          Student:'学生列表',
+          Degree: '学生选课情况',
 
 
         }
@@ -444,6 +444,7 @@
 
 <style scoped>
   .index-vue {
+
     height: 100%;
     display: flex;
     justify-content: space-between;
@@ -470,9 +471,9 @@
   }
 
   .logo {
-    height: 30px;
-    width: 30px;
-    margin: 10px;
+    height: 70px;
+    width: 70px;
+    margin-right: 10px;
 
   }
 

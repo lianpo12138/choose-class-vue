@@ -1,8 +1,29 @@
 <template>
-    <div>
-        查看消息
-        <input type="text">
-    </div>
+      <div>
+        <strong style="font-size: large">查看消息</strong>
+        <br><br>
+        <List header="Header" footer="Footer" border>
+          <ListItem>This is a piece of text.</ListItem>
+          <ListItem>This is a piece of text.</ListItem>
+          <ListItem>This is a piece of text.</ListItem>
+        </List>
+        <br>
+        <strong>Small Size:</strong>
+        <br><br>
+        <List header="Header" footer="Footer" border size="small">
+          <ListItem>This is a piece of text.</ListItem>
+          <ListItem>This is a piece of text.</ListItem>
+          <ListItem>This is a piece of text.</ListItem>
+        </List>
+        <br>
+        <strong>Large Size:</strong>
+        <br><br>
+        <List header="Header" footer="Footer" border size="large">
+          <ListItem>This is a piece of text.</ListItem>
+          <ListItem>This is a piece of text.</ListItem>
+          <ListItem>This is a piece of text.</ListItem>
+        </List>
+      </div>
 </template>
 
 <script>

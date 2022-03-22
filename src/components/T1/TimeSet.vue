@@ -1,7 +1,7 @@
 <template>
   <div>
-    <span>注意事项：设置日期的格式为  <b style="font-size: medium">2020-1-1</b>
-    <p>教学周历，默认展示最新学期周历</p></span>
+    <h3>注意事项：1.设置日期的格式为  <b style="font-size: medium">2020-1-1</b>
+    <span>2.教学周历，默认展示最新学期周历</span></h3>
     <Table :columns="columns" :data="data" border>
       <template slot-scope="{ row, index }" slot="id">
         {{ row.id}}
@@ -40,17 +40,17 @@
                   @on-ok="handleSave(index)"
                   @on-cancel="editIndex = -1"
                   confirm transfer>
-            <Button>确认</Button>
+            <Button type="primary" size="small">确认</Button>
           </poptip>
 
         </div>
         <div v-else>
-          <Button @click="handleEdit(row, index)">修改</Button>
+          <Button size="small" type="primary" @click="handleEdit(row, index)">修改</Button>
           <Poptip title="确认删除数据吗?"
                   @on-ok="deleteTerm(row,index)"
                   @on-cancel="editIndex = -1"
                   confirm transfer>
-            <Button>删除</Button>
+            <Button size="small" type="error">删除</Button>
           </poptip>
 
         </div>
@@ -99,7 +99,8 @@
           },
           {
             title: '操作',
-            slot: 'action'
+            slot: 'action',
+            width: 130
           }
         ],
         data: [],

@@ -1,20 +1,26 @@
 <template>
   <div>
-    <Input search
-           enter-button="搜索"
-           v-model="query"
-           size="large"
-           @on-search="search()"
-           placeholder="教室名/教室功能/所在教学楼/校区">
-      <span slot="prepend">输入</span>
-    </Input>
-    <br>
-    <Table stripe border :columns="columns" :data="listdata"></Table>
-    <br>
+    <Input class="i" search v-model="query" @on-search="search()" placeholder="请输入教室名"></Input>
+
+    <span  v-if="this.$store.state.user=='admin'">
+      <Upload class="i"  action="http://localhost:9000/user/import"
+              headers="Content-Type: multipart/form-data"
+              show-upload-list="false"
+              name="file"
+              accept="application/vnd.ms-excel">
+
+
+      <Button icon="ios-cloud-upload-outline">批量教室导入</Button>
+      </Upload>
+      <a @click="downloadTemplete">下载导入模板</a>
+    </span>
+    <Table class="t" stripe border :columns="columns" :data="listdata"></Table>
+    <br/>
     <Page :total="page.total"
           :current="page.pageNum"
           :page-size="page.pageSize"
           @on-change="pNumChange"
+
           @on-page-size-change="pSizeChange"
           show-sizer
           show-elevator
@@ -26,6 +32,64 @@
         <Table border stripe :columns="section" :data="classdata"></Table>
       </div>
     </Modal>
+    <Drawer
+      placement="left"
+      title="编辑"
+      v-model="value3"
+      width="600"
+      :mask-closable="false"
+      :styles="styles"
+    >
+      <Form :model="formData">
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="编号" label-position="top">
+              <Input v-model="formData.classroomId" disabled/>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="教室名称" label-position="top">
+              <Input v-model="formData.name">
+              </Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="所在教学楼" label-position="top">
+              <Select v-model="formData.building">
+                <Option v-for="item in buildings " :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="教室功能" label-position="left">
+              <Input v-model="formData.function"></Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="校区" label-position="left">
+              <Select v-model="formData.origin">
+                <Option value="东校区">东区</Option>
+                <Option value="西校区">西区</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col>
+            <FormItem label="容纳人数" label-position="top">
+              <InputNumber v-model="formData.capacity" controls-outside></InputNumber>
+            </FormItem>
+          </Col>
+        </Row>
+
+      </Form>
+      <div class="demo-drawer-footer">
+        <Button style="margin-right: 8px" @click="value3 = false">取消</Button>
+        <Button type="primary" @click="updateClassroom">确认修改</Button>
+      </div>
+    </Drawer>
   </div>
 </template>
 
@@ -112,7 +176,6 @@
                     click: () => {
                       this.modal = true;
                       this.rowname = params.row.name
-                      console.log(this.rowname)
                     }
                   }
                 }, '查看'),
@@ -123,10 +186,12 @@
                   },
                   on: {
                     click: () => {
-                      this.remove(params.index)
+                      console.log(params.row);
+                      this.formData = params.row
+                      this.value3 = true
                     }
                   }
-                }, '编辑  ')
+                }, '编辑')
               ]);
             }
           }
@@ -182,6 +247,10 @@
             time: '第七节（16:00-16:40）'
           }, {
             time: '第八节（16:50-17:30）'
+          }, {
+            time: '第九节（19:00-19:45）'
+          }, {
+            time: '第十节（19:55-20:40）'
           }
         ],
         query: '',
@@ -190,10 +259,33 @@
           pageSize: 10,
           pageNum: 1
         },
+        value3: false,
+        styles: {
+          height: 'calc(100% - 55px)',
+          overflow: 'auto',
+          paddingBottom: '53px',
+          position: 'static'
+        },
+        formData: {
+          building: "",
+          capacity: 0,
+          classroomId: "",
+          function: "",
+          name: "",
+          origin: ""
+        },
+        buildings: [],
+        isShow: false
       };
     },
     methods: {
-
+      /* 下载模板*/
+      downloadTemplete() {
+        console.log(this.$axios.defaults.baseURL + "/disPic/template/classroomTemplate.xls");
+        this.$axios.get("disPic/template/classroomTemplate.xls")
+        window.location.href = this.$axios.defaults.baseURL + "/disPic/template/classroomTemplate.xls";
+        // window.open("http://localhost:90/img/temp/classroomTemplate.xls");
+      },
       /* 修改当前页事件*/
       pNumChange(i) {
         this.page.pageNum = i;
@@ -235,12 +327,46 @@
       },
       remove(index) {
         this.data.splice(index, 1);
-      }
+      },
+      updateClassroom() {
+        this.value3 = false;
+        this.$Message.success("修改成功！")
+      },
+      //批量导入用户方法
+      getFile(event) {
+        console.log(event);
+
+      //   this.file = event.target.files[0];
+      //   var url = axios.defaults.baseURL;
+      //   event.preventDefault();
+      //   let formData = new FormData();
+      //   formData.append('file', this.file);
+      //   var vm = this;
+      //   let config = {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data'
+      //     }
+      //   }
+      //   axios.post(vm.apiUrl + '/upload',formData, config).then(function(res) {
+      //     vm.$Notice.open({
+      //       title: '导入成功',
+      //       duration: 2
+      //
+      //     });
+      //     vm.queryUsers();
+      //     if (res.status === 2000) {
+      //       /*这里做处理*/
+      //     }
+      //   })
+      },
+
     },
     mounted: function () {
       /* 获取教学楼集合*/
       this.$axios.get("/classroom/buildings")
         .then(rep => {
+
+
           for (let i = 0; i < rep.data.length; i++) {
             this.columns[3].filters.push(
               {
@@ -248,6 +374,7 @@
                 value: rep.data[i]
               })
           }
+          this.buildings = this.columns[3].filters
         });
       /* 获取数据*/
       this.search();
@@ -256,6 +383,24 @@
 </script>
 
 <style scoped>
+  .i {
+    display: inline-block;
+    width: auto;
+    margin-right: 15px;
+  }
+  .t{
+    margin-top: 10px;
+  }
 
+  .demo-drawer-footer {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    text-align: right;
+    background: #fff;
+  }
 
 </style>

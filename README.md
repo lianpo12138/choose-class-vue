@@ -97,3 +97,8 @@ npm run build
 
 
 ### 如果对你有帮助，请给个Star
+
+npm install less-loader@5.0.0 -D
+如果显示less-loader报错
+
+* 课程表

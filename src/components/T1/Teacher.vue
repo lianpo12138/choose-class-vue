@@ -14,7 +14,11 @@
                 confirm transfer>
           <Button type="primary" size="small" @click="">重置密码</Button>
         </Poptip>
-        <Button type="error" size="small" @click="remove(index)">删除老师</Button>
+        <Poptip title="确认删除该老师!"
+                @on-ok="remove(index)"
+                confirm transfer>
+          <Button type="error" size="small">删除老师</Button>
+        </Poptip>
 
       </template>
     </Table>
@@ -62,28 +66,7 @@
             align: 'center'
           }
         ],
-        data: [
-          {
-            name: 'John Brown',
-            age: 18,
-            address: 'New York No. 1 Lake Park'
-          },
-          {
-            name: 'Jim Green',
-            age: 24,
-            address: 'London No. 1 Lake Park'
-          },
-          {
-            name: 'Joe Black',
-            age: 30,
-            address: 'Sydney No. 1 Lake Park'
-          },
-          {
-            name: 'Jon Snow',
-            age: 26,
-            address: 'Ottawa No. 2 Lake Park'
-          }
-        ],
+        data: [],
         acadeList: [],
         loginName: '',
         name: '',
@@ -94,10 +77,6 @@
       };
     },
     methods: {
-      initPage() {
-        this.pageSize = 10,
-          this.pageNum = 1
-      },
       pNumChange(i) {
         this.pageNum = i;
         this.getTeachers();
@@ -149,6 +128,9 @@
         });
         console.log(row)
 
+      },
+      remove(index) {
+        this.data.splice(index, 1);
       }
 
     },

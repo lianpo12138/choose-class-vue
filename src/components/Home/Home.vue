@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg">
     <h2 style="font-size: 24px">
       公告
     </h2>
@@ -23,5 +23,23 @@
 <style scoped>
   .int {
     font-size: 20px;
+  }
+  .bg {
+    background-image: url("../../assets/b1.jpeg");
+    position: fixed;
+    /*top: 0;*/
+    /*left: 0;*/
+    width: 85%;
+    height: 85%;
+    min-width: 800px;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center 0;
+    text-align: center;
+    padding-top: 50px;
+  }
+  h2{
+    position: center;
   }
 </style>

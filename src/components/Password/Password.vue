@@ -1,5 +1,6 @@
 <template>
-  <Form ref="formInline" :model="formInline" :rules="ruleInline" inline>
+  <div class="bg">
+  <Form class="f" ref="formInline" :model="formInline" :rules="ruleInline" inline>
     <FormItem prop="origin">
       <Input type="password" v-model="formInline.origin" placeholder="旧密码">
         <Icon type="ios-lock-outline" slot="prepend"></Icon>
@@ -20,6 +21,7 @@
       <Button @click="cancel()">取消</Button>
     </FormItem>
   </Form>
+  </div>
 </template>
 
 <script>
@@ -87,5 +89,18 @@
 </script>
 
 <style scoped>
-
+  .f{
+  }
+  .bg {
+    background-image: url("../../assets/b3.jpeg");
+    position: fixed;
+    /*top: 0; left: 0;*/
+    width: 80%;
+    height: 80%;
+    min-width: 800px;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -o-background-size: cover;
+    background-position: center 0;
+  }
 </style>

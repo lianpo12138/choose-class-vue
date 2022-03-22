@@ -22,7 +22,7 @@
     </FormItem>
     <Modal
       v-model="modal"
-      title="新增教师信息"
+      title="添加成功！下列为新增教师信息"
     >
       <p>姓名：{{teacher.realname}}</p>
       <p>工号：{{teacher.loginname}}</p>
@@ -31,7 +31,18 @@
       <p>邮箱：{{teacher.email}}</p>
     </Modal>
 
+    <Upload
+      multiple
+      type="drag"
+      action="//jsonplaceholder.typicode.com/posts/">
+      <div style="padding: 20px 0">
+        <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
+        <p>批量导入老师数据</p>
+      </div>
+    </Upload>
+    <a>下载导入模板</a>
   </Form>
+
 </template>
 
 <script>
@@ -66,11 +77,13 @@
       };
     },
     methods: {
+      /* 添加教师方法*/
       addTeacher() {
         this.$axios.post("/teacher/add", this.formItem).then(rep => {
           this.teacher = rep.data.content
         })
       },
+      /* 表单提交方法*/
       handleSubmit(name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
@@ -83,9 +96,10 @@
         })
 
       },
+      /* 重置表单数据*/
       handleReset(name) {
         this.$refs[name].resetFields();
-      }
+      },
     },
     mounted() {
     }
@@ -97,8 +111,8 @@
 <style scoped>
 
   .f {
-    width: 30%;
+    width: 40%;
     padding: 50px;
-    background-color: #8be0eb
+    background-color: #FEF0EF;
   }
 </style>
