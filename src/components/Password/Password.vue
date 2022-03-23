@@ -1,5 +1,5 @@
 <template>
-  <div class="bg">
+  <div>
   <Form class="f" ref="formInline" :model="formInline" :rules="ruleInline" inline>
     <FormItem prop="origin">
       <Input type="password" v-model="formInline.origin" placeholder="旧密码">
@@ -20,7 +20,9 @@
       <Button type="primary" @click="handleSubmit()">确认修改</Button>
       <Button @click="cancel()">取消</Button>
     </FormItem>
-  </Form>
+  </Form><img src="../../assets/b3.jpeg">
+    <img src="../../assets/b2.jpeg">
+
   </div>
 </template>
 
@@ -91,16 +93,5 @@
 <style scoped>
   .f{
   }
-  .bg {
-    background-image: url("../../assets/b3.jpeg");
-    position: fixed;
-    /*top: 0; left: 0;*/
-    width: 80%;
-    height: 80%;
-    min-width: 800px;
-    background-size: cover;
-    -webkit-background-size: cover;
-    -o-background-size: cover;
-    background-position: center 0;
-  }
+
 </style>

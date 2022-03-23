@@ -3,10 +3,12 @@
     <Input class="i" search v-model="query" @on-search="search()" placeholder="请输入教室名"></Input>
 
     <span  v-if="this.$store.state.user=='admin'">
-      <Upload class="i"  action="http://localhost:9000/user/import"
-              headers="Content-Type: multipart/form-data"
-              show-upload-list="false"
+      <Upload class="i"
+              action="http://localhost:9000/user/import"
               name="file"
+              show-upload-list
+              :before-upload="getFile"
+              :on-success="getOnFile"
               accept="application/vnd.ms-excel">
 
 
@@ -188,6 +190,7 @@
                     click: () => {
                       console.log(params.row);
                       this.formData = params.row
+                      console.log(this.formData)
                       this.value3 = true
                     }
                   }
@@ -275,7 +278,7 @@
           origin: ""
         },
         buildings: [],
-        isShow: false
+        upUrl: ''
       };
     },
     methods: {
@@ -333,32 +336,16 @@
         this.$Message.success("修改成功！")
       },
       //批量导入用户方法
-      getFile(event) {
-        console.log(event);
-
-      //   this.file = event.target.files[0];
-      //   var url = axios.defaults.baseURL;
-      //   event.preventDefault();
-      //   let formData = new FormData();
-      //   formData.append('file', this.file);
-      //   var vm = this;
-      //   let config = {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data'
-      //     }
-      //   }
-      //   axios.post(vm.apiUrl + '/upload',formData, config).then(function(res) {
-      //     vm.$Notice.open({
-      //       title: '导入成功',
-      //       duration: 2
-      //
-      //     });
-      //     vm.queryUsers();
-      //     if (res.status === 2000) {
-      //       /*这里做处理*/
-      //     }
-      //   })
+      getFile: function (event) {
+        console.log('进入了上传文件前的方法');
+        return ;
       },
+      getOnFile(response, file, fileList) {
+        this.$Notice.success({
+          title: '添加数据通知',
+          desc: response.message
+        });
+      }
 
     },
     mounted: function () {

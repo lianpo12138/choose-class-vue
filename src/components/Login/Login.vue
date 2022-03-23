@@ -47,7 +47,7 @@
       }
     },
     created() {
-      this.bg.backgroundImage = 'url(' + require('../../assets/bg0' + new Date().getDay() + '.jpg');
+      this.bg.backgroundImage = 'url(' + require('../../assets/bg0' + new Date().getDay() + '.jpg')+")";
     },
     mounted() {
       document.onkeydown = e => {
