@@ -4,7 +4,7 @@
 
     <span  v-if="this.$store.state.user=='admin'">
       <Upload class="i"
-              action="http://localhost:9000/user/import"
+              action="/api/user/importClassRoom"
               name="file"
               show-upload-list
               :before-upload="getFile"
@@ -14,7 +14,7 @@
 
       <Button icon="ios-cloud-upload-outline">批量教室导入</Button>
       </Upload>
-      <a @click="downloadTemplete">下载导入模板</a>
+      <a @click="downloadTemplate">下载导入模板</a>
     </span>
     <Table class="t" stripe border :columns="columns" :data="listdata"></Table>
     <br/>
@@ -283,9 +283,7 @@
     },
     methods: {
       /* 下载模板*/
-      downloadTemplete() {
-        console.log(this.$axios.defaults.baseURL + "/disPic/template/classroomTemplate.xls");
-        this.$axios.get("disPic/template/classroomTemplate.xls")
+      downloadTemplate() {
         window.location.href = this.$axios.defaults.baseURL + "/disPic/template/classroomTemplate.xls";
         // window.open("http://localhost:90/img/temp/classroomTemplate.xls");
       },
