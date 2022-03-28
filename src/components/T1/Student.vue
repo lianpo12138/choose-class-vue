@@ -3,10 +3,14 @@
 
     <Input class="i" search placeholder="根据学号查询" @on-search="getStudents" v-model="query.loginname"/>
     <Input class="i" search placeholder="根据姓名查询" @on-search="getStudents" v-model="query.name"/>
-    <Upload class="i" action="//jsonplaceholder.typicode.com/posts/">
+    <Upload
+      class="i"
+      :on-success="importStudents"
+      accept="application/vnd.ms-excel"
+      action="/api/user/importStudents">
       <Button icon="ios-cloud-upload-outline">批量导入学生</Button>
     </Upload>
-    <a :href="downUrl" target="_blank" :download="downNm">下载导入模板</a>
+    <a @click="downloadExcel">下载导入模板</a>
     <Table class="t" border :columns="columns" :data="data">
       <template slot-scope="{ row, index }" slot="action">
         <Poptip title="确认是否重置密码！"
@@ -75,6 +79,17 @@
       };
     },
     methods: {
+      downloadExcel() {
+        window.location.href = this.$axios.defaults.baseURL + "/disPic/template/studentTemplate.xls";
+      },
+      importStudents(response, file, fileList) {
+        console.log(response);
+        this.$Notice.success({
+            title: '添加数据通知',
+            desc: response.message
+          }
+        );
+      },
       pNumChange(i) {
         this.query.pageNum = i;
         this.getStudents();

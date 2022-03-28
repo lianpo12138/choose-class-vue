@@ -34,13 +34,15 @@
     <Upload
       multiple
       type="drag"
-      action="//jsonplaceholder.typicode.com/posts/">
+      :on-success="importTeacher"
+      accept="application/vnd.ms-excel"
+      action="/api/user/importTeachers">
       <div style="padding: 20px 0">
         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
         <p>批量导入老师数据</p>
       </div>
     </Upload>
-    <a>下载导入模板</a>
+    <a @click="downloadTemplate">下载导入模板</a>
   </Form>
 
 </template>
@@ -100,6 +102,19 @@
       handleReset(name) {
         this.$refs[name].resetFields();
       },
+      downloadTemplate(){
+        console.log("进入下载方法")
+        window.location.href = this.$axios.defaults.baseURL + "/disPic/template/teacherTemplate.xls";
+      },
+      importTeacher(response, file, fileList) {
+        console.log(response.message)
+        this.$Notice.success({
+            title: '添加数据通知',
+            desc: response.message
+          }
+        );
+
+      }
     },
     mounted() {
     }
